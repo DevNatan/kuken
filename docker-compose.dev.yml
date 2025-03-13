@@ -1,31 +1,11 @@
 services:
-  kuken:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: kuken_server
-    restart: on-failure
-    ports:
-      - "8080:8080"
-    environment:
-      - PORT=8080
-      - DB_HOST=database
-      - DB_PASS=katan
-      - ENV=dev
-      - DOCKER_HOST=tcp://database:2375
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    depends_on:
-      database:
-        condition: service_healthy
-
   database:
     image: postgres:latest
+    container_name: katan-postgres
     restart: on-failure
     environment:
-      - POSTGRES_PASSWORD=katan
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 1s
-      timeout: 5s
-      retries: 5
+      - POSTGRES_USER=kuken
+      - POSTGRES_PASSWORD=kuken
+      - POSTGRES_DB=kuken
+    ports:
+      - "5432:5432"

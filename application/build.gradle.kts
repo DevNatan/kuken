@@ -10,10 +10,6 @@ application {
     mainClass.set("org.katan.Application")
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     runtimeOnly(libs.log4j.slf4j2)
     implementation(projects.core)
