@@ -1,6 +1,6 @@
 [versions]
 kotlin = "1.9.10"
-ktx-serialization = "1.6.0"
+ktx-serialization = "1.8.1"
 ktx-coroutines = "1.7.3"
 ktx-atomicfu = "0.22.0"
 ktx-datetime = "0.4.0"
