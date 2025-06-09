@@ -18,7 +18,7 @@ jedis = "4.4.3"
 hibernate-validator = "8.0.1.Final"
 expressly = "5.0.0"
 plugin-shadowjar = "8.1.1"
-plugin-kotlinter = "3.16.0"
+plugin-kotlinter = "5.1.1"
 detekt = "1.23.1"
 
 [libraries]
