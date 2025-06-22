@@ -1,7 +1,9 @@
-version: "3"
 services:
-  katan:
-    image: ghcr.io/katanpanel/katan:main
+  kuken:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kuken_server
     restart: on-failure
     ports:
       - "8080:8080"
@@ -10,21 +12,20 @@ services:
       - DB_HOST=database
       - DB_PASS=katan
       - ENV=dev
-      - DOCKER_HOST=tcp://localhost:2375
+      - DOCKER_HOST=tcp://database:2375
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-  web-ui:
-    image: ghcr.io/katanpanel/web-ui:main
-    container_name: web-ui
-    restart: always
-    ports:
-      - "80:80"
-      - "433:433"
-    environment:
-      - VITE_KATAN_API=http://localhost:8080
-      - VITE_KATAN_GATEWAY=ws://localhost:8080
+    depends_on:
+      database:
+        condition: service_healthy
+
   database:
     image: postgres:latest
     restart: on-failure
     environment:
       - POSTGRES_PASSWORD=katan
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 1s
+      timeout: 5s
+      retries: 5

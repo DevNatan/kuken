@@ -1,25 +1,25 @@
 [versions]
-kotlin = "1.9.10"
+kotlin = "2.1.20"
 ktx-serialization = "1.8.1"
-ktx-coroutines = "1.7.3"
-ktx-atomicfu = "0.22.0"
-ktx-datetime = "0.4.0"
-exposed = "0.42.1"
-koin = "3.4.3"
-koinKtor = "3.4.3"
-log4j = "2.24.3"
-ktor = "2.3.9"
+ktx-coroutines = "1.8.1"
+ktx-atomicfu = "0.28.0"
+ktx-datetime = "0.6.2"
+exposed = "0.61.0"
+koin = "4.1.0"
+koinKtor = "4.1.0"
+log4j = "2.25.0"
+ktor = "3.2.0"
 snowflake-id = "0.0.2"
-postgresql = "42.6.0"
-javaJwt = "4.4.0"
+postgresql = "42.7.7"
+javaJwt = "4.5.0"
 yoki = "0.2.0"
-bcprov = "1.76"
-jedis = "4.4.3"
-hibernate-validator = "8.0.1.Final"
-expressly = "5.0.0"
-plugin-shadowjar = "8.1.1"
-plugin-kotlinter = "3.16.0"
-detekt = "1.23.1"
+bcprov = "1.81"
+jedis = "6.0.0"
+hibernate-validator = "9.0.1.Final"
+expressly = "6.0.0"
+plugin-shadowjar = "8.3.6"
+plugin-kotlinter = "5.1.1"
+detekt = "1.23.8"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -77,6 +77,6 @@ exposed = ["exposed-core", "exposed-dao", "exposed-jdbc", "exposed-kotlin-dateti
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-atomicfu = { id = "org.jetbrains.kotlin.plugin.atomicfu", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-shadowjar = { id = "com.github.johnrengelman.shadow", version.ref = "plugin-shadowjar" }
+shadowjar = { id = "com.gradleup.shadow", version.ref = "plugin-shadowjar" }
 kotlinter = { id = "org.jmailen.kotlinter", version.ref = "plugin-kotlinter" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

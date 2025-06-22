@@ -12,6 +12,7 @@ import io.ktor.server.auth.jwt.jwt
 import io.ktor.server.auth.principal
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
+import io.ktor.server.routing.intercept
 import io.ktor.server.routing.routing
 import org.katan.http.HttpModule
 import org.katan.http.response.HttpError
@@ -39,6 +40,7 @@ internal class AuthHttpModule : HttpModule() {
     }
 
     private fun Routing.addAccountAttributeIfNeeded() {
+        // TODO migrate to route scoped plugins
         intercept(ApplicationCallPipeline.Call) {
             val account = call.principal<AccountPrincipal>()?.account
                 ?: return@intercept
