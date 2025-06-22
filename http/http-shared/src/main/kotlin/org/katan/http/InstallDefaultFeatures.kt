@@ -9,7 +9,7 @@ import io.ktor.server.application.install
 import io.ktor.server.application.log
 import io.ktor.server.plugins.BadRequestException
 import io.ktor.server.plugins.autohead.AutoHeadResponse
-import io.ktor.server.plugins.callloging.CallLogging
+import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.cors.routing.CORS
 import io.ktor.server.plugins.dataconversion.DataConversion
@@ -17,7 +17,7 @@ import io.ktor.server.plugins.defaultheaders.DefaultHeaders
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.resources.Resources
 import io.ktor.server.response.respond
-import io.ktor.server.routing.Routing
+import io.ktor.server.routing.RoutingRoot
 import io.ktor.server.websocket.WebSockets
 import io.ktor.server.websocket.pingPeriod
 import io.ktor.server.websocket.timeout
@@ -32,11 +32,10 @@ import org.katan.model.toSnowflake
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.toJavaDuration
 
 @OptIn(ExperimentalSerializationApi::class)
 fun Application.installDefaultFeatures(isDevelopmentMode: Boolean, json: Json) {
-    install(Routing)
+    install(RoutingRoot)
     install(Resources)
     install(DefaultHeaders)
     install(AutoHeadResponse)
@@ -110,8 +109,8 @@ fun Application.installDefaultFeatures(isDevelopmentMode: Boolean, json: Json) {
         anyHost()
     }
     install(WebSockets) {
-        pingPeriod = 15.seconds.toJavaDuration()
-        timeout = 15.seconds.toJavaDuration()
+        pingPeriod = 15.seconds
+        timeout = 15.seconds
         maxFrameSize = Long.MAX_VALUE
     }
 }

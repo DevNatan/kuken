@@ -2,7 +2,8 @@ package org.katan.http.server
 
 import io.ktor.server.application.Application
 import io.ktor.server.cio.CIO
-import io.ktor.server.engine.ApplicationEngine
+import io.ktor.server.cio.CIOApplicationEngine
+import io.ktor.server.engine.EmbeddedServer
 import io.ktor.server.engine.EngineConnectorBuilder
 import io.ktor.server.engine.addShutdownHook
 import io.ktor.server.engine.embeddedServer
@@ -25,6 +26,8 @@ import org.koin.core.component.get
 import org.koin.core.component.inject
 import kotlin.reflect.jvm.jvmName
 
+private typealias CIOEmbeddedServer = EmbeddedServer<CIOApplicationEngine, CIOApplicationEngine.Configuration>
+
 class HttpServer(private val host: String, private val port: Int) :
     CoroutineScope by CoroutineScope(CoroutineName(HttpServer::class.jvmName)), KoinComponent {
 
@@ -38,30 +41,30 @@ class HttpServer(private val host: String, private val port: Int) :
     private val config by inject<KatanConfig>()
     private val webSocketManager by inject<WebSocketManager>()
     private var shutdownPending by atomic(false)
-    private val engine: ApplicationEngine = createEngine()
+    private val server: CIOEmbeddedServer = createServer()
 
     init {
         System.setProperty("io.ktor.development", config.isDevelopment.toString())
     }
 
     fun start() {
-        engine.addShutdownHook(::stop)
+        server.addShutdownHook(::stop)
 
-        for (connector in engine.environment.connectors)
+        for (connector in server.engineConfig.connectors)
             logger.debug("Listening on {}", connector)
 
-        engine.start(wait = true)
+        server.start(wait = true)
     }
 
     fun stop() {
         if (shutdownPending) return
 
         shutdownPending = true
-        engine.stop(STOP_GRACE_PERIOD_MILLIS, TIMEOUT_MILLIS)
+        server.stop(STOP_GRACE_PERIOD_MILLIS, TIMEOUT_MILLIS)
         shutdownPending = false
     }
 
-    private fun setupEngine(app: Application) = with(app) {
+    private fun configureApplication(app: Application) = with(app) {
         installDefaultFeatures(
             isDevelopmentMode = config.isDevelopment,
             json = get<Json>(),
@@ -82,9 +85,9 @@ class HttpServer(private val host: String, private val port: Int) :
         }
     }
 
-    private fun createEngine() = embeddedServer(
+    private fun createServer() = embeddedServer(
         factory = CIO,
-        module = { setupEngine(this) },
+        module = { configureApplication(this) },
         connectors = arrayOf(
             EngineConnectorBuilder().apply {
                 host = this@HttpServer.host

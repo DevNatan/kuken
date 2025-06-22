@@ -5,11 +5,12 @@ import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.call
 import io.ktor.server.request.receiveNullable
 import io.ktor.server.response.respond
+import io.ktor.server.routing.RoutingContext
 import io.ktor.util.pipeline.PipelineContext
 import jakarta.validation.Validator
 import org.katan.http.HttpException
 
-suspend inline fun PipelineContext<*, ApplicationCall>.respond(
+suspend inline fun RoutingContext.respond(
     response: Any,
     status: HttpStatusCode = HttpStatusCode.OK
 ): Unit = call.respond(status, response)

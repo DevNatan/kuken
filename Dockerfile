@@ -1,19 +1,9 @@
-FROM eclipse-temurin:17-jdk AS TEMP_BUILD_IMAGE
-LABEL MAINTAINER="Natan Vieira Do Nascimento <natan@katan.org>"
-ENV BUILD_HOME=/usr/katan-build
-COPY . $BUILD_HOME
-WORKDIR $BUILD_HOME
-USER root
-RUN ./gradlew --no-configuration-cache --warning-mode all application:shadowJar
-
-# Production build
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:17-jre-jammy
 ENV ARTIFACT_NAME=katan.jar
-ENV BUILD_HOME=/usr/katan-build
-ENV HOME=/usr/katan
+ENV HOME=/usr/kuken
 
 WORKDIR $HOME
 RUN mkdir resources
-COPY --from=TEMP_BUILD_IMAGE $BUILD_HOME/application/build/libs/ .
-COPY --from=TEMP_BUILD_IMAGE $BUILD_HOME/application/build/resources/main/ ./resources
+COPY application/build/libs/ .
+COPY application/build/resources/main/ ./resources
 ENTRYPOINT exec java -jar $HOME/${ARTIFACT_NAME}
