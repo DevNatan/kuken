@@ -12,14 +12,15 @@ ktor = "3.2.1"
 snowflake-id = "0.0.2"
 postgresql = "42.7.7"
 javaJwt = "4.5.0"
-yoki = "0.2.0"
+docker-kotlin = "0.6.0"
 bcprov = "1.81"
 jedis = "6.0.0"
-hibernate-validator = "9.0.1.Final"
+validator = "9.0.1.Final"
 expressly = "6.0.0"
 plugin-shadowjar = "8.3.6"
 plugin-kotlinter = "5.1.1"
 detekt = "1.23.8"
+hocon = "1.4.3"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -63,15 +64,30 @@ exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "e
 exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
 exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
 javaJwt = { module = "com.auth0:java-jwt", version.ref = "javaJwt" }
-yoki = { module = "me.devnatan:yoki", version.ref = "yoki" }
+dockerKotlin = { module = "me.devnatan:yoki", version.ref = "docker-kotlin" }
 bcprov = { module = "org.bouncycastle:bcprov-jdk15to18", version.ref = "bcprov" }
 jedis = { module = "redis.clients:jedis", version.ref = "jedis" }
 expressly = { module = "org.glassfish.expressly:expressly", version.ref = "expressly" }
-hibernateValidator = { module = "org.hibernate.validator:hibernate-validator", version.ref = "hibernate-validator" }
-hibernateValidator-cdi = { module = "org.hibernate.validator:hibernate-validator-cdi", version.ref = "hibernate-validator" }
+validator = { module = "org.hibernate.validator:hibernate-validator", version.ref = "validator" }
+validator-processor = { module = "org.hibernate.validator:hibernate-validator-annotation-processor", version.ref = "validator" }
+hocon = { module = "com.typesafe:config", version.ref = "hocon" }
 
 [bundles]
 exposed = ["exposed-core", "exposed-dao", "exposed-jdbc", "exposed-kotlin-datetime"]
+ktor = ["ktor-server-core",
+    "ktor-server-cio",
+    "ktor-server-feature-calllogging",
+    "ktor-server-feature-defaultHeaders",
+    "ktor-server-feature-resources",
+    "ktor-server-feature-statuspages",
+    "ktor-server-feature-autoHeadResponse",
+    "ktor-server-feature-cors",
+    "ktor-server-websockets",
+    "ktor-server-feature-contentNegotiation",
+    "ktor-serialization-kotlinx-json",
+    "ktor-server-auth",
+    "ktor-server-auth-jwt"
+]
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
