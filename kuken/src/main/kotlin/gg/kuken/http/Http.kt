@@ -7,12 +7,10 @@ import gg.kuken.http.websocket.WebSocketManager
 import io.ktor.server.application.Application
 import io.ktor.server.cio.CIO
 import io.ktor.server.engine.EmbeddedServer
-import io.ktor.server.engine.EngineConnectorBuilder
 import io.ktor.server.engine.addShutdownHook
 import io.ktor.server.engine.embeddedServer
 import kotlinx.atomicfu.atomic
 import kotlinx.serialization.json.Json
-import org.apache.logging.log4j.LogManager
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -24,7 +22,7 @@ internal object Http : KoinComponent {
     private val appConfig: KukenConfig by inject()
 
     private var shutdownPending = atomic(false)
-    private val engine: EmbeddedServer<*, *> = createEngine()
+    private val engine: EmbeddedServer<*, *> = createServer()
     private val webSocketManager = WebSocketManager(json = Json)
 
     init {
@@ -53,20 +51,17 @@ internal object Http : KoinComponent {
         }
     }
 
-    private fun setupEngine(app: Application): Unit = with(app) {
+    private fun configureApplication(app: Application): Unit = with(app) {
         installDefaultFeatures(appConfig)
         registerHttpModules()
     }
 
-    private fun createEngine() = embeddedServer(
+    private fun createServer() = embeddedServer(
         factory = CIO,
-        configure = {
-            connectors.add(EngineConnectorBuilder().apply {
-                host = appConfig.http.host
-                port = appConfig.http.port
-            })
-        },
-        module = { setupEngine(this) }
+        host = appConfig.http.host,
+        port = appConfig.http.port,
+        watchPaths = listOf("classes").takeIf { appConfig.devMode }.orEmpty(),
+        module = { configureApplication(this) },
     )
 
     fun createHttpModules() = setOf(
